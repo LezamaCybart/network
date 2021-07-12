@@ -2,7 +2,7 @@
 from django.urls import path
 
 from . import views
-from .views import NewPost
+from .views import NewPost, Post, AllPostsView
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -10,7 +10,8 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
 
-    path("post/<int:pk>", views.NewPost.as_view(), name="post-view"),
+    path("post/<int:pk>", views.PostView.as_view(), name="post-view"),
+    path("all-posts", views.AllPostsView.as_view(), name="all-posts"),
 
     path("new_post", views.NewPost.as_view(), name="new-post")
 ]

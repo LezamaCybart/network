@@ -75,9 +75,10 @@ class NewPost(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.likes = 0
+        form.instance.date
         return super().form_valid(form)
 
-class Post(DetailView):
+class PostView(DetailView):
     model = Post
     template_name = 'network/post.html'
     context_object_name = 'post'
@@ -86,4 +87,14 @@ class Post(DetailView):
     def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
             return context
+    """
+
+class AllPostsView(ListView):
+    model = Post
+    template_name = 'network/all-posts.html'
+
+    """
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
     """

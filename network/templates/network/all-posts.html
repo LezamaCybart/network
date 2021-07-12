@@ -1,0 +1,13 @@
+{% extends "network/layout.html" %} {% block body %}
+<ul>
+  {% for post in object_list %}
+  <li>
+    <h3>{{ post.author }}</h3>
+    {{ post.body }}
+    <br>
+    <small>{{ post.date }}</small>
+    <small>likes: {{ post.likes }}</small>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
