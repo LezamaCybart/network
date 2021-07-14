@@ -104,7 +104,27 @@ class AllPostsView(ListView):
         return context
     """
 
-#TODO switch to function instead of class, to implement put method
+class FollowingView(ListView):
+    model = Post
+    template_name = 'network/following-posts.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        following = Following.objects.get(user=self.request.user).following.all()
+        posts = Post.objects.all()
+
+        following_posts = list()
+
+        for post in posts:
+            author = post.author
+            if author in following:
+                following_posts.append(post)
+    
+        context['posts'] = following_posts
+
+        return context
+
 class ProfileView(CsrfExemptMixin, DetailView):
     model = User
     template_name = 'network/profile.html'

@@ -1,0 +1,13 @@
+{% extends "network/layout.html" %} {% block body %}
+<ul>
+  {% for post in posts %}
+  <li>
+    <h3><a href="{% url 'profile' pk=post.author.id %}">{{ post.author }}</a></h3>
+    {{ post.body }}
+    <br>
+    <small>{{ post.date }}</small>
+    <small>likes: {{ post.likes }}</small>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
