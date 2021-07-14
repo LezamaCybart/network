@@ -97,6 +97,7 @@ class PostView(DetailView):
 class AllPostsView(ListView):
     model = Post
     template_name = 'network/all-posts.html'
+    paginate_by = 10
 
     """
     def get_context_data(self, **kwargs):
@@ -108,6 +109,7 @@ class FollowingView(ListView):
     model = Post
     template_name = 'network/following-posts.html'
     context_object_name = 'posts'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

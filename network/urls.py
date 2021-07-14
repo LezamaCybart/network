@@ -11,7 +11,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
 
     path("post/<int:pk>", views.PostView.as_view(), name="post-view"),
-    path("all-posts", views.AllPostsView.as_view(), name="all-posts"),
+    path("all-posts/", views.AllPostsView.as_view(), name="all-posts"),
     path("following-posts", views.FollowingView.as_view(), name="following-posts"),
 
     path("new_post", views.NewPost.as_view(), name="new-post"),
