@@ -6,7 +6,10 @@ from django.urls import reverse
 
 
 class User(AbstractUser):
-    pass
+
+    def get_absolute_url(self):
+        return reverse('profile', args=(str(self.id)))
+
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
@@ -32,8 +35,9 @@ class Likes(models.Model):
         return f"Like {self.id} to post {self.post} by {self.user}"
 
 class Following(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE, related_name="following")
-    users_being_followed = models.ForeignKey(Post, on_delete=CASCADE, related_name="followers")
+    user = models.ForeignKey(User, on_delete=CASCADE, related_name='user')
+    following = models.ManyToManyField(User, blank=True, null=True, default=None, related_name='following')
+    followers = models.ManyToManyField(User, blank=True, null=True, default=None, related_name='followers')
 
     def __str__(self) -> str:
-        return f"following id: {self.d}, user {self.user} following {self.users_being_followed}"
+        return f"following id: {self.user}, following: {self.following} followers: {self.followers}"

@@ -1,0 +1,21 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+   {% load static %}
+   <script src="{% static 'network/profile.js' %}"></script>   
+   <h3>{{ profile }}</h3>
+   <br>
+   <p id="followers">followers: {{ followers }}</p>
+   following: {{ following }} 
+   is following: {{ is_following }}
+
+   <br>
+   profile id: {{ profile_user_id }}|
+   user id: {{ user_id }}
+   <br>
+   <p id="is_following" hidden>{{ is_following }}</p>
+   {{ profile.username|json_script:"profile"}}
+   {% if user.is_authenticated %}
+   <button id="follow_button" onclick="follow('{{ user_id }}', '{{ profile_user_id }}', '{{ profile.id }}')">Follow</button>
+   {% endif %}
+{% endblock %}
