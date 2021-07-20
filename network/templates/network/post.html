@@ -1,5 +1,22 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {{ post }}
+   {% load static %}
+   <script src="{% static 'network/post.js' %}"></script>   
+   <div class="" id="post-div">
+    <h3>{{ post.author }}</h3>
+    <p id="post-body">{{ post.body }}</p>
+   </div>
+    <br>
+    {% if user_id == post.author.id %}
+        <button id="edit-btn">Edit</button>
+    {% endif %}
+
+    <div id="edit-view">
+        <form id="compose-form">
+            <textarea class="form-control" id="edit-body" placeholder="Body"></textarea>
+            <input type="submit" class="btn btn-primary"/>
+        </form>
+    </div>
+
 {% endblock %}

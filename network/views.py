@@ -83,16 +83,28 @@ class NewPost(LoginRequiredMixin, CreateView):
         form.instance.date
         return super().form_valid(form)
 
-class PostView(DetailView):
+class PostView(CsrfExemptMixin, DetailView):
     model = Post
     template_name = 'network/post.html'
     context_object_name = 'post'
 
-    """
     def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
+            context['user_id'] = self.request.user.id
             return context
-    """
+    
+    def put(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+
+        post_id = data.get("post_id")
+        new_body = data.get("new_body")
+
+        post = Post.objects.get(id=post_id)
+        post.body = new_body
+        post.save()
+        return JsonResponse({"message": "saved"}, status=201)
+
+
 
 class AllPostsView(ListView):
     model = Post
