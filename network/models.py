@@ -28,11 +28,11 @@ class Post(models.Model):
         return reverse('post-view', args=(str(self.id)))
 
 class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE, related_name="liked_by")
     post = models.ForeignKey(Post, on_delete=CASCADE, related_name="likes_by")
+    users = models.ManyToManyField(User, blank=True, null=True, default=None, related_name='liked_by')
 
     def __str__(self) -> str:
-        return f"Like {self.id} to post {self.post} by {self.user}"
+        return f"Like {self.id} to post {self.post} by {self.users}"
 
 class Following(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE, related_name='user')

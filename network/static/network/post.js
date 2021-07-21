@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    doesLike = document.querySelector('#does_like').textContent;
+
+    likeButton = document.querySelector('#like-button');
+
+    if (doesLike == "True") {
+        likeButton.textContent = 'Unlike'
+    }
     document.querySelector('#edit-view').style.display = 'none';
 
     document.querySelector('#edit-btn').addEventListener('click', () => {
@@ -32,4 +39,28 @@ const submitPost = (post_id) => {
             new_body: document.querySelector('#edit-body').value
         })
     })
+}
+
+const like = (current_user, post_id) => {
+    fetch(`/post/${post_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            like: true,
+            post_id: post_id,
+            user_id: current_user
+        })
+    })
+
+    likeButton = document.querySelector('#like-button');
+    likes = document.querySelector('#likes');
+    likeCount = parseInt(likes.textContent.split(" ")[1]);
+
+    if (likeButton.textContent == 'Like') {
+        likeButton.textContent = 'Unlike';
+        likes.textContent = `likes: ${likeCount + 1}`
+    } else {
+        likeButton.textContent = 'Like';
+        likes.textContent = `likes: ${likeCount - 1}`
+    }
+
 }

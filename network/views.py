@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from braces.views import CsrfExemptMixin
-from network.utils import is_following
+from network.utils import does_like, is_following
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Following, User, Post
+from .models import Following, Likes, User, Post
 
 class PostForm(forms.Form):
     body = forms.Textarea()
@@ -91,15 +91,31 @@ class PostView(CsrfExemptMixin, DetailView):
     def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
             context['user_id'] = self.request.user.id
+            context['like_count'] = Likes.objects.get_or_create(post=kwargs['object'])[0].users.all().count()
+            context['does_like'] = does_like(self.request.user.id, kwargs['object'].id)
+
             return context
     
     def put(self, request, *args, **kwargs):
         data = json.loads(request.body)
 
         post_id = data.get("post_id")
+        post = Post.objects.get(id=post_id)
+
+        if data.get("like") == True:
+            like = Likes.objects.get(post=post)
+            user = User.objects.get(id=data.get("user_id"))
+            if does_like(user.id, post.id):
+                like.users.remove(user)
+                like.save()
+                return JsonResponse({"message": "unliked"}, status=200)
+            else:
+                like.users.add(user)
+                like.save()
+                return JsonResponse({"message": "liked"}, status=200)
+
         new_body = data.get("new_body")
 
-        post = Post.objects.get(id=post_id)
         post.body = new_body
         post.save()
         return JsonResponse({"message": "saved"}, status=201)

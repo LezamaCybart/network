@@ -10,7 +10,11 @@
     <br>
     {% if user_id == post.author.id %}
         <button id="edit-btn">Edit</button>
+    {% else %}
+        <span id="edit-btn" hidden></span>
     {% endif %}
+    <br>
+    <p id="likes">likes: {{ like_count }}</p>
 
     <div id="edit-view">
         <form id="compose-form">
@@ -18,5 +22,10 @@
             <input type="submit" class="btn btn-primary"/>
         </form>
     </div>
+   <p id="does_like" hidden>{{ does_like }}</p>
+   <br>
+   {% if user.is_authenticated %}
+    <button id="like-button" onclick="like('{{ user_id }}', '{{ post.id }}')">Like</button>
+   {% endif %}
 
 {% endblock %}
